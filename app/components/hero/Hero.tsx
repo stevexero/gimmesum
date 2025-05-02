@@ -397,7 +397,7 @@ export default function Hero() {
               >
                 <Link
                   href={`/collections/${cards[i].inspirationSlug}`}
-                  className='text-red-900 font-serif text-lg leading-relaxed border-b-2 border-red-900 hover:scale-105 transition-all duration-300 ease-in-out'
+                  className='text-red-900 font-serif text-lg leading-relaxed border-b-2 border-red-900 hover:scale-105 transition-all duration-300 ease-in-o'
                 >
                   {cards[i].dropDate}
                 </Link>
