@@ -4,9 +4,9 @@
 
 .fire {
   position: absolute;
-  bottom: 0;
+  /* bottom: 0; */
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
   pointer-events: none;
 }
 
@@ -34,10 +34,11 @@
   animation: fire 1.75s linear infinite paused;
 }
 
-.group:hover .fire::before {
+.fire.lit::before {
   visibility: visible;
   opacity: 1;
   animation-play-state: running;
+  animation: fire 1.75s linear infinite, fadeAway 0.3s ease 20s forwards;
 }
 
 @keyframes fire {
@@ -46,5 +47,12 @@
   }
   100% {
     background-position: center -500px, center -650px, center bottom;
+  }
+}
+
+@keyframes fadeAway {
+  to {
+    opacity: 0;
+    visibility: hidden;
   }
 }

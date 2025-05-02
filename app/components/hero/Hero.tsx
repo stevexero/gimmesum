@@ -5,6 +5,7 @@ import { useSprings, animated } from '@react-spring/web';
 import Image from 'next/image';
 import Particles, { initParticlesEngine } from '@tsparticles/react';
 import { loadFirePreset } from '@tsparticles/preset-fire';
+import Link from 'next/link';
 
 export default function Hero() {
   const cards = useMemo(
@@ -14,35 +15,55 @@ export default function Hero() {
         labelImage: '/images/sin.png',
         labelImageRed: '/images/sin_red.png',
         image: '/images/orange.jpg',
+        burntImage: '/images/burnt_1_a.png',
+        paperImage: '/images/paper_1.png',
         translationLabel: 'sin',
+        dropDate: 'Fall / Winter 2026',
+        inspirationSlug: 'sin',
       },
       {
         label: 'くやむ',
         labelImage: '/images/regret.png',
         labelImageRed: '/images/regret_red.png',
         image: '/images/red.jpg',
+        burntImage: '/images/burnt_2_a.png',
+        paperImage: '/images/paper_2.png',
         translationLabel: 'regret',
+        dropDate: 'Spring / Summer 2027',
+        inspirationSlug: 'regret',
       },
       {
         label: 'たえる',
         labelImage: '/images/endure.png',
         labelImageRed: '/images/endure_red.png',
         image: '/images/blue.jpg',
+        burntImage: '/images/burnt_1_a.png',
+        paperImage: '/images/paper_3.png',
         translationLabel: 'endure',
+        dropDate: 'Fall / Winter 2027',
+        inspirationSlug: 'endure',
       },
       {
         label: 'あらためる',
         labelImage: '/images/reform.png',
         labelImageRed: '/images/reform_red.png',
         image: '/images/green.jpg',
+        burntImage: '/images/burnt_4_a.png',
+        paperImage: '/images/paper_4.png',
         translationLabel: 'reform',
+        dropDate: 'Spring / Summer 2028',
+        inspirationSlug: 'reform',
       },
       {
         label: 'あがなう',
         labelImage: '/images/redemption.png',
         labelImageRed: '/images/redemption_red.png',
         image: '/images/yellow.jpg',
+        burntImage: '/images/burnt_2_a.png',
+        paperImage: '/images/paper_5.png',
         translationLabel: 'redemption',
+        dropDate: 'Fall / Winter 2028',
+        inspirationSlug: 'redemption',
       },
     ],
     []
@@ -54,6 +75,7 @@ export default function Hero() {
   const [pendingSelection, setPendingSelection] = useState<number | null>(null);
   const [particlesInit, setParticlesInit] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [hoveredDivs, setHoveredDivs] = useState<number[]>([]);
 
   const [springs, api] = useSprings(cards.length, (i) => ({
     transform: 'rotateY(0deg)',
@@ -85,14 +107,22 @@ export default function Hero() {
     });
   }, []);
 
-  useEffect(() => {
-    const img1 = new window.Image();
-    img1.src = '/images/bg_fire_1.png';
-    const img2 = new window.Image();
-    img2.src = '/images/bg_fire_2.png';
-  }, []);
+  const handleMouseEnter = (index: number) => {
+    setHoveredIndex(index);
+    if (!hoveredDivs.includes(index)) {
+      setHoveredDivs((prev) => [...prev, index]);
+    }
+  };
 
-  const handleClick = (index: number) => {
+  const handleMouseLeave = (index: number) => {
+    setHoveredIndex(null);
+  };
+
+  const handleClick = (index: number, e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest('a')) {
+      return;
+    }
+
     if (selected === null) {
       setPendingSelection(index);
       const img = new window.Image();
@@ -115,7 +145,7 @@ export default function Hero() {
       },
       particles: {
         number: {
-          value: 100,
+          value: 15,
           density: {
             enable: false,
           },
@@ -127,7 +157,7 @@ export default function Hero() {
           type: 'circle',
         },
         opacity: {
-          value: { min: 0.1, max: 0.8 },
+          value: { min: 0.1, max: 0.5 },
           animation: {
             enable: true,
             speed: 2,
@@ -135,7 +165,7 @@ export default function Hero() {
           },
         },
         size: {
-          value: { min: 1, max: 3 },
+          value: { min: 1, max: 2 },
           animation: {
             enable: true,
             speed: 2,
@@ -144,7 +174,7 @@ export default function Hero() {
         },
         move: {
           enable: true,
-          speed: { min: 1, max: 3 },
+          speed: { min: 1, max: 2 },
           direction: 'top' as const,
           random: true,
           straight: false,
@@ -153,18 +183,60 @@ export default function Hero() {
           },
         },
       },
-      emitters: {
-        position: {
-          x: 50,
-          y: 25,
+    }),
+    []
+  );
+
+  const embersParticlesOptions = useMemo(
+    () => ({
+      fullScreen: { enable: false },
+      background: {
+        color: {
+          value: 'transparent',
         },
-        rate: {
-          quantity: 2,
-          delay: 0.1,
+      },
+      particles: {
+        number: {
+          value: 10,
+          density: {
+            enable: false,
+          },
+        },
+        color: {
+          value: [
+            '#ffffff',
+            '#aa0000',
+            '#ff0000',
+            '#ff5500',
+            '#ff8800',
+            '#ff5544',
+          ],
+        },
+        shape: {
+          type: 'circle',
+        },
+        opacity: {
+          value: { min: 0.1, max: 0.8 },
+          animation: {
+            enable: true,
+            speed: 1,
+            sync: false,
+          },
         },
         size: {
-          width: 5,
-          height: 5,
+          value: { min: 0.5, max: 2 },
+          animation: {
+            enable: true,
+            speed: 1,
+            sync: false,
+          },
+        },
+        move: {
+          enable: true,
+          speed: { min: 0, max: 0.2 },
+          direction: 'top' as const,
+          random: true,
+          straight: false,
         },
       },
     }),
@@ -184,10 +256,10 @@ export default function Hero() {
           key={i}
           onClick={(e) => {
             e.stopPropagation();
-            handleClick(i);
+            handleClick(i, e);
           }}
-          onMouseEnter={() => setHoveredIndex(i)}
-          onMouseLeave={() => setHoveredIndex(null)}
+          onMouseEnter={() => handleMouseEnter(i)}
+          onMouseLeave={() => handleMouseLeave(i)}
           className='flex-1 relative flex items-center justify-center cursor-pointer group'
           style={{
             ...style,
@@ -217,25 +289,44 @@ export default function Hero() {
                 }}
               />
             </div>
-            <div className='fire' />
-            <div className='relative flex flex-col items-center p-2 text-black/40 transition-all duration-300 ease-in-out group-hover:items-center group-hover:pb-56 group-hover:pt-40 group-hover:text-red-900'>
+            <div
+              className={`fire
+            ${
+              hoveredDivs.includes(i)
+                ? 'lit bottom-[175px] h-0'
+                : 'bottom-0 h-full group-hover:bottom-[175px] group-hover:h-0'
+            } transition-all duration-[5000ms] ease-in-out`}
+            ></div>
+            <div
+              className={`${
+                hoveredDivs.includes(i)
+                  ? 'items-center pb-56 pt-40 text-red-900'
+                  : 'group-hover:items-center group-hover:pb-56 group-hover:pt-40 group-hover:text-red-900'
+              } relative flex flex-col items-center p-2 text-black/40 transition-all duration-300 ease-in-out`}
+            >
               <span
-                className='font-bold group-hover:opacity-75 group-hover:scale-125 group-hover:mb-12 transition-all duration-300 ease-in-out'
+                className={`${
+                  hoveredDivs.includes(i)
+                    ? 'opacity-75 scale-125 mb-12'
+                    : 'group-hover:opacity-75 group-hover:scale-125 group-hover:mb-12'
+                } font-bold transition-all duration-300 ease-in-out`}
                 translate='no'
               >
                 {cards[i].label}
               </span>
               <div className='relative w-24 h-24'>
                 {particlesInit && hoveredIndex === i && (
-                  <div className='absolute top-0 left-0 w-full h-full'>
-                    <Particles
-                      id={`tsparticles-${i}`}
-                      options={particlesOptions}
-                      style={{
-                        zIndex: 5,
-                      }}
-                    />
-                  </div>
+                  <>
+                    <div className='absolute top-0 left-0 w-full h-full'>
+                      <Particles
+                        id={`tsparticles-${i}`}
+                        options={particlesOptions}
+                        style={{
+                          zIndex: 5,
+                        }}
+                      />
+                    </div>
+                  </>
                 )}
                 <Image
                   src={cards[i].labelImage}
@@ -247,7 +338,11 @@ export default function Hero() {
                     transition: 'opacity 300ms ease-in-out',
                     zIndex: 10,
                   }}
-                  className='opacity-75 group-hover:opacity-0 transition-all duration-300 ease-in-out'
+                  className={`${
+                    hoveredDivs.includes(i)
+                      ? 'opacity-0'
+                      : 'opacity-75 group-hover:opacity-0'
+                  } transition-all duration-300 ease-in-out`}
                 />
                 <Image
                   src={cards[i].labelImageRed}
@@ -259,12 +354,85 @@ export default function Hero() {
                     transition: 'opacity 300ms ease-in-out',
                     zIndex: 10,
                   }}
-                  className='opacity-0 group-hover:opacity-85 group-hover:scale-[2] transition-all duration-300 ease-in-out'
+                  className={`${
+                    hoveredDivs.includes(i)
+                      ? 'opacity-85 scale-[2]'
+                      : 'opacity-0 group-hover:opacity-85 group-hover:scale-[2]'
+                  } transition-all duration-300 ease-in-out`}
                 />
               </div>
-              <span className='font-bold group-hover:opacity-75 group-hover:scale-125 group-hover:mt-8 transition-all duration-300 ease-in-out'>
+              <span
+                className={`${
+                  hoveredDivs.includes(i)
+                    ? 'opacity-75 scale-125 mt-8'
+                    : 'group-hover:opacity-75 group-hover:scale-125 group-hover:mt-8'
+                } font-bold transition-all duration-300 ease-in-out`}
+              >
                 ( {cards[i].translationLabel} )
               </span>
+            </div>
+            <div>
+              <Image
+                src={cards[i].paperImage}
+                alt='burnt paper'
+                fill
+                priority
+                style={{
+                  objectFit: 'contain',
+                  mixBlendMode: 'darken',
+                  filter: 'blur(10px)',
+                }}
+                className={`${
+                  hoveredDivs.includes(i)
+                    ? 'opacity-100'
+                    : 'opacity-0 group-hover:opacity-100'
+                } object-[100%_104%] transition-all duration-[5000ms] ease-out`}
+              />
+              <div
+                className={`absolute inset-0 flex items-center justify-center text-center px-8 z-10 ${
+                  hoveredDivs.includes(i)
+                    ? 'opacity-100 -bottom-[80%]'
+                    : '-bottom-[200%] opacity-0 group-hover:opacity-100 group-hover:-bottom-[80%]'
+                } transition-all duration-[5000ms] ease-out`}
+              >
+                <Link
+                  href={`/collections/${cards[i].inspirationSlug}`}
+                  className='text-red-900 font-serif text-lg leading-relaxed border-b-2 border-red-900 hover:scale-105 transition-all duration-300 ease-in-out'
+                >
+                  {cards[i].dropDate}
+                </Link>
+              </div>
+            </div>
+            <Image
+              src={cards[i].burntImage}
+              alt='burnt edges'
+              fill
+              priority
+              style={{
+                objectFit: 'contain',
+              }}
+              className={`${
+                hoveredDivs.includes(i)
+                  ? `scale-x-150 object-[100%_100%]`
+                  : `scale-x-100 object-[100%_140%] group-hover:scale-x-150 group-hover:object-[100%_100%]`
+              } transition-all duration-[5000ms] ease-out`}
+            />
+            <div
+              className={`${
+                hoveredDivs.includes(i)
+                  ? 'opacity-100'
+                  : 'opacity-0 group-hover:opacity-100'
+              } transition-all duration-[5000ms] ease-in`}
+            >
+              {particlesInit && (
+                <div className='absolute left-0 bottom-[165px] w-full h-7 overflow-hidden'>
+                  <Particles
+                    id={`tsparticles-${i}-embers`}
+                    options={embersParticlesOptions}
+                    style={{ zIndex: 5, width: '100%', height: '100%' }}
+                  />
+                </div>
+              )}
             </div>
           </div>
 
