@@ -114,7 +114,7 @@ export default function Hero() {
     }
   };
 
-  const handleMouseLeave = (index: number) => {
+  const handleMouseLeave = () => {
     setHoveredIndex(null);
   };
 
@@ -259,7 +259,7 @@ export default function Hero() {
             handleClick(i, e);
           }}
           onMouseEnter={() => handleMouseEnter(i)}
-          onMouseLeave={() => handleMouseLeave(i)}
+          onMouseLeave={() => handleMouseLeave()}
           className='flex-1 relative flex items-center justify-center cursor-pointer group'
           style={{
             ...style,
